@@ -11,7 +11,7 @@
   --bg-color: #020817;
   --text-color: #ffffff;
   --secondary-bg: #1a1a1a;
-  --border-color: #1a1a1a;
+  --border-color: #333333;
   --header-bg: #020817;
   --table-hover: #1a1a1a;
 }
@@ -61,6 +61,8 @@ button {
   cursor: pointer;
   margin-right: 10px;
   border-radius: 4px;
+  font-weight: 500;
+  font-size: 16px;
 }
 
 button.active {
@@ -197,7 +199,7 @@ button.active {
 }
 
 .icon-button:hover {
-  background-color: var(--border-color);
+  background-color: #666;
 }
 
 .theme-dropdown {
@@ -209,7 +211,8 @@ button.active {
   top: 100%;
   right: 0;
   margin-top: 8px;
-  background-color: var(--secondary-bg);
+  background-color: var(--bg-color);
+  border: 1px solid #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 8px;
@@ -234,11 +237,11 @@ button.active {
   background-color: var(--border-color);
 }
 
-.theme-menu button.active {
-  background-color: var(--border-color);
+.crypto-table tbody tr {
+  transition: background-color 0.2s ease;
 }
 
-.crypto-table tr:hover {
+.crypto-table tbody tr:hover {
   background-color: var(--table-hover);
 }
 

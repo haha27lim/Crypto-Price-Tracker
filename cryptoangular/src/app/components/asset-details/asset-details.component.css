@@ -1,7 +1,29 @@
+.light-theme {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --secondary-bg: #f5f5f5;
+  --border-color: #e0e0e0;
+  --header-bg: #ffffff;
+  --table-hover: #f5f5f5;
+}
+
+.dark-theme {
+  --bg-color: #020817;
+  --text-color: #ffffff;
+  --secondary-bg: #1a1a1a;
+  --border-color: #1a1a1a;
+  --header-bg: #020817;
+  --table-hover: #1a1a1a;
+}
+
+
 .asset-details {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  min-height: 100vh;
+  transition: all 0.3s ease;
+  background-color: var(--background-color);
   color: var(--text-color);
 }
 
@@ -43,8 +65,11 @@
 }
 
 .rank {
-  color: #666;
+  color: #ffffff;
   font-size: 14px;
+  border-radius: 4px;
+  background-color: #666; 
+  padding: 1px 8px;
 }
 
 .stats-grid {
@@ -55,9 +80,10 @@
 }
 
 .stats-card {
-  background-color: var(--secondary-bg);
+  background-color: var(--card-background);
   padding: 20px;
   border-radius: 8px;
+  border: 1px solid var(--border-color);
 }
 
 .stats-header {
@@ -105,9 +131,10 @@
 }
 
 .chart-card {
-  background-color: var(--secondary-bg);
+  background-color: var(--card-background);
   padding: 20px;
   border-radius: 8px;
+  border: 1px solid var(--border-color);
 }
 
 .chart-header {
@@ -117,7 +144,7 @@
 .chart-header h2 {
   margin: 0;
   font-size: 18px;
-  color: #666;
+  color: #ffffff;
 }
 
 .chart-container {

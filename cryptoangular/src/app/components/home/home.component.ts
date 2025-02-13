@@ -1,7 +1,8 @@
 import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 interface Crypto {
   id: string;
@@ -19,105 +20,82 @@ interface Crypto {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterModule]
+  imports: [CommonModule, RouterModule, FormsModule]
 })
 export class HomeComponent implements OnInit {
-  currentView: 'all' | 'gainers' | 'losers' = 'all';
-  loading = true;
   cryptos: Crypto[] = [];
   filteredCryptos: Crypto[] = [];
-  currentTheme: 'light' | 'dark' | 'system' = 'system';
+  loading = true;
+  searchQuery = '';
+  currentView = 'all';
+  currentTheme = 'system';
   showThemeMenu = false;
 
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {
-    this.fetchCryptos();
-  }
+  ) {}
 
   ngOnInit() {
+    this.fetchCryptos();
     if (isPlatformBrowser(this.platformId)) {
       this.initializeTheme();
-      if (window.matchMedia) {
-        window.matchMedia('(prefers-color-scheme: dark)')
-          .addEventListener('change', this.handleSystemThemeChange.bind(this));
-      }
-    }
-  }
-
-  initializeTheme() {
-    if (isPlatformBrowser(this.platformId)) {
-      const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'system' | null;
-      if (savedTheme) {
-        this.currentTheme = savedTheme;
-      }
-      this.applyTheme();
-    }
-  }
-
-  toggleThemeMenu() {
-    this.showThemeMenu = !this.showThemeMenu;
-  }
-
-  setTheme(theme: 'light' | 'dark' | 'system') {
-    this.currentTheme = theme;
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('theme', theme);
-      this.applyTheme();
-    }
-    this.showThemeMenu = false;
-  }
-
-  applyTheme() {
-    if (isPlatformBrowser(this.platformId)) {
-      if (this.currentTheme === 'system') {
-        const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.body.classList.toggle('dark-theme', isDarkMode);
-        document.body.classList.toggle('light-theme', !isDarkMode);
-      } else {
-        document.body.classList.toggle('dark-theme', this.currentTheme === 'dark');
-        document.body.classList.toggle('light-theme', this.currentTheme === 'light');
-      }
-    }
-  }
-
-  handleSystemThemeChange(e: MediaQueryListEvent) {
-    if (this.currentTheme === 'system') {
-      this.applyTheme();
-    }
-  }
-
-  switchView(view: 'all' | 'gainers' | 'losers') {
-    this.currentView = view;
-    this.filterCryptos();
-  }
-
-  filterCryptos() {
-    switch (this.currentView) {
-      case 'gainers':
-        this.filteredCryptos = [...this.cryptos]
-          .sort((a, b) => parseFloat(b.changePercent24Hr) - parseFloat(a.changePercent24Hr))
-          .slice(0, 100);
-        break;
-      case 'losers':
-        this.filteredCryptos = [...this.cryptos]
-          .sort((a, b) => parseFloat(a.changePercent24Hr) - parseFloat(b.changePercent24Hr))
-          .slice(0, 100);
-        break;
-      default:
-        this.filteredCryptos = this.cryptos;
     }
   }
 
   fetchCryptos() {
     this.loading = true;
-    this.http.get<any>('https://api.coincap.io/v2/assets')
-      .subscribe(response => {
-        this.cryptos = response.data;
-        this.filterCryptos();
-        this.loading = false;
+    this.http.get<{data: Crypto[]}>('https://api.coincap.io/v2/assets')
+      .subscribe({
+        next: (response) => {
+          this.cryptos = response.data;
+          this.filteredCryptos = this.cryptos;
+          this.loading = false;
+          this.applyCurrentView();
+        },
+        error: (error) => {
+          console.error('Error fetching crypto data:', error);
+          this.loading = false;
+        }
       });
+  }
+
+  handleSearch() {
+    if (this.cryptos) {
+      this.filteredCryptos = this.cryptos.filter(crypto => 
+        crypto.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        crypto.symbol.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+      this.applyCurrentView();
+    }
+  }
+
+  switchView(view: string) {
+    this.currentView = view;
+    this.applyCurrentView();
+  }
+
+  applyCurrentView() {
+    let filtered = [...this.cryptos];
+    if (this.searchQuery) {
+      filtered = filtered.filter(crypto => 
+        crypto.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        crypto.symbol.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    }
+
+    switch (this.currentView) {
+      case 'gainers':
+        filtered.sort((a, b) => parseFloat(b.changePercent24Hr) - parseFloat(a.changePercent24Hr));
+        filtered = filtered.slice(0, 20);
+        break;
+      case 'losers':
+        filtered.sort((a, b) => parseFloat(a.changePercent24Hr) - parseFloat(b.changePercent24Hr));
+        filtered = filtered.slice(0, 20);
+        break;
+    }
+
+    this.filteredCryptos = filtered;
   }
 
   formatPrice(price: string): string {
@@ -155,10 +133,6 @@ export class HomeComponent implements OnInit {
     }).format(numericPrice);
   }
 
-  formatPercentage(percent: string): string {
-    return Number(percent).toFixed(2) + '%';
-  }
-
   formatMarketCap(marketCap: string): string {
     const numericValue = parseFloat(marketCap);
     return new Intl.NumberFormat('en-US', {
@@ -169,7 +143,7 @@ export class HomeComponent implements OnInit {
       notation: 'standard'
     }).format(numericValue);
   }
-
+  
   formatVolume(volume: string): string {
     const numericVolume = parseFloat(volume);
     return new Intl.NumberFormat('en-US', {
@@ -181,12 +155,42 @@ export class HomeComponent implements OnInit {
     }).format(numericVolume);
   }
 
-  getPercentageClass(percent: string): string {
-    const value = Number(percent);
-    return value >= 0 ? 'positive' : 'negative';
+  formatPercentage(percent: string): string {
+    const value = parseFloat(percent);
+    const sign = value >= 0 ? '+' : '';
+    return `${sign}${value.toFixed(2)}%`;
   }
 
-  onImageError(event: any) {
-    event.target.src = 'https://assets.coincap.io/assets/icons/generic@2x.png';
+  getPercentageClass(percent: string): string {
+    return parseFloat(percent) >= 0 ? 'positive' : 'negative';
+  }
+
+  onImageError(event: Event) {
+    const img = event.target as HTMLImageElement;
+    img.src = 'assets/placeholder-crypto.png';
+  }
+
+  initializeTheme() {
+    if (isPlatformBrowser(this.platformId)) {
+      const savedTheme = localStorage.getItem('theme') || 'system';
+      this.setTheme(savedTheme);
+    }
+  }
+
+  setTheme(theme: string) {
+    this.currentTheme = theme;
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('theme', theme);
+    }
+    this.showThemeMenu = false;
+  }
+
+  toggleThemeMenu() {
+    this.showThemeMenu = !this.showThemeMenu;
+  }
+
+  onThemeChange(theme: string) {
+    this.currentTheme = theme;
+    // Apply theme-specific styles or trigger other theme-related logic
   }
 } 

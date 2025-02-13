@@ -5,13 +5,14 @@ import { CryptoService, Crypto } from '../../services/crypto.service';
 import { Observable } from 'rxjs';
 import { Chart, TimeScale } from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
+import { NavBarComponent } from '../nav-bar/nav-bar.component';
 
 @Component({
   selector: 'app-asset-details',
   templateUrl: './asset-details.component.html',
   styleUrls: ['./asset-details.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterModule]
+  imports: [CommonModule, RouterModule, NavBarComponent]
 })
 export class AssetDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('priceChart') priceChart!: ElementRef;
@@ -19,6 +20,7 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
   asset$: Observable<Crypto>;
   priceHistory$: Observable<any>;
   chart: any;
+  currentTheme = 'system';
 
   constructor(
     private route: ActivatedRoute,
@@ -29,7 +31,10 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
     this.priceHistory$ = this.cryptoService.getAssetHistory(this.assetId);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Get the saved theme from localStorage
+    this.currentTheme = localStorage.getItem('theme') || 'system';
+  }
 
   ngAfterViewInit() {
     this.priceHistory$.subscribe(history => {
@@ -41,7 +46,13 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
 
   initChart(history: any[]) {
     const ctx = this.priceChart.nativeElement.getContext('2d');
-    const data = history.map(item => ({
+    
+    // Sort history by time
+    const sortedHistory = [...history].sort((a, b) => 
+      new Date(a.time).getTime() - new Date(b.time).getTime()
+    );
+
+    const data = sortedHistory.map(item => ({
       x: new Date(item.time),
       y: parseFloat(item.priceUsd)
     }));
@@ -117,10 +128,38 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
   }
 
   formatPrice(price: string): string {
+    const numericPrice = parseFloat(price);
+    
+    // For prices less than $1
+    if (numericPrice < 1) {
+      // Find the first non-zero digit after decimal
+      const decimalStr = numericPrice.toString().split('.')[1];
+      let significantIndex = 0;
+      for (let i = 0; i < decimalStr.length; i++) {
+        if (decimalStr[i] !== '0') {
+          significantIndex = i;
+          break;
+        }
+      }
+      
+      // Show 4 digits after the first significant digit
+      const decimals = Math.max(significantIndex + 4, 2);
+      
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+      }).format(numericPrice);
+    }
+    
+    // For prices $1 and above
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD'
-    }).format(Number(price));
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(numericPrice);
   }
 
   formatPercentage(percent: string): string {
@@ -128,11 +167,25 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
   }
 
   formatMarketCap(marketCap: string): string {
-    const value = Number(marketCap);
-    if (value >= 1e9) {
-      return '$' + (value / 1e9).toFixed(2) + 'B';
-    }
-    return '$' + (value / 1e6).toFixed(2) + 'M';
+    const numericValue = parseFloat(marketCap);
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+      notation: 'standard'
+    }).format(numericValue);
+  }
+  
+  formatVolume(volume: string): string {
+    const numericVolume = parseFloat(volume);
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+      notation: 'standard'
+    }).format(numericVolume);
   }
 
   getPercentageClass(percent: string): string {
@@ -143,5 +196,9 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
   onImageError(event: Event) {
     const target = event.target as HTMLImageElement;
     target.src = 'https://assets.coincap.io/assets/icons/generic@2x.png';
+  }
+
+  onThemeChange(theme: string) {
+    this.currentTheme = theme;
   }
 } 

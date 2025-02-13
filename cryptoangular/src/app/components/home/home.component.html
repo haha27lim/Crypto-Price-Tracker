@@ -4,7 +4,12 @@
       <h1>Crypto Price Tracker</h1>
       <div class="header-controls">
         <div class="search-bar">
-          <input type="text" placeholder="Search cryptocurrencies...">
+          <input 
+            type="text" 
+            placeholder="Search cryptocurrencies..." 
+            [(ngModel)]="searchQuery"
+            (keyup.enter)="handleSearch()"
+            (input)="handleSearch()">
         </div>
         <div class="header-buttons">
           <button class="icon-button refresh-btn" (click)="fetchCryptos()" title="Refresh">
@@ -57,20 +62,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let crypto of filteredCryptos">
+        <tr *ngFor="let crypto of filteredCryptos" [routerLink]="['/asset', crypto.id]" style="cursor: pointer;">
           <td>{{ crypto.rank }}</td>
           <td class="name-cell">
-            <a [routerLink]="['/asset', crypto.id]" class="crypto-name-link">
-              <img [src]="'https://assets.coincap.io/assets/icons/' + crypto.symbol.toLowerCase() + '@2x.png'" 
-                   [alt]="crypto.name"
-                   (error)="onImageError($event)">
-              <div class="name-details">
-                <div class="name-row">
-                  <span class="crypto-name">{{ crypto.name }}</span>
-                  <span class="crypto-symbol">({{crypto.symbol}})</span>
-                </div>
+            <img [src]="'https://assets.coincap.io/assets/icons/' + crypto.symbol.toLowerCase() + '@2x.png'" 
+                 [alt]="crypto.name"
+                 (error)="onImageError($event)">
+            <div class="name-details">
+              <div class="name-row">
+                <span class="crypto-name">{{ crypto.name }}</span>
+                <span class="crypto-symbol">({{crypto.symbol}})</span>
               </div>
-            </a>
+            </div>
           </td>
           <td>{{ formatPrice(crypto.priceUsd) }}</td>
           <td>

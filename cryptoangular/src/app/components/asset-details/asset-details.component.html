@@ -1,4 +1,6 @@
 <div class="asset-details" *ngIf="asset$ | async as asset">
+  <app-nav-bar [currentTheme]="currentTheme" (themeChange)="onThemeChange($event)"></app-nav-bar>
+  
   <div class="header">
     <div class="back-button">
       <a routerLink="/">← Back to List</a>
@@ -29,7 +31,7 @@
       <div class="stats-header">Market Cap</div>
       <div class="stats-main">
         <div class="market-cap">{{formatMarketCap(asset.marketCapUsd)}}</div>
-        <div class="volume">Volume (24h): {{formatMarketCap(asset.volumeUsd24Hr)}}</div>
+        <div class="volume">Volume (24h): {{formatVolume(asset.volumeUsd24Hr)}}</div>
       </div>
     </div>
   </div>

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export interface Crypto {
+  id: string;
   rank: number;
   symbol: string;
   name: string;
@@ -11,6 +12,11 @@ export interface Crypto {
   changePercent24Hr: string;
   marketCapUsd: string;
   volumeUsd24Hr: string;
+}
+
+export interface HistoryPoint {
+  time: number;
+  priceUsd: string;
 }
 
 @Injectable({
