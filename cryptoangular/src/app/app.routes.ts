@@ -1,12 +1,8 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
+import { AssetDetailsComponent } from './components/asset-details/asset-details.component';
 
 export const routes: Routes = [
-  // Define your routes here
+  { path: '', component: HomeComponent },
+  { path: 'asset/:id', component: AssetDetailsComponent }
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }

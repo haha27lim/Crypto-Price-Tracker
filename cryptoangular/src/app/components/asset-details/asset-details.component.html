@@ -1,0 +1,45 @@
+<div class="asset-details" *ngIf="asset$ | async as asset">
+  <div class="header">
+    <div class="back-button">
+      <a routerLink="/">← Back to List</a>
+    </div>
+    <div class="asset-header">
+      <img [src]="'https://assets.coincap.io/assets/icons/' + asset.symbol.toLowerCase() + '@2x.png'" 
+           [alt]="asset.name"
+           (error)="onImageError($event)">
+      <div class="asset-title">
+        <h1>{{asset.name}} ({{asset.symbol}})</h1>
+        <span class="rank">Rank #{{asset.rank}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stats-card price-card">
+      <div class="stats-header">Price</div>
+      <div class="stats-main">
+        <div class="price">{{formatPrice(asset.priceUsd)}}</div>
+        <div [class]="'change ' + getPercentageClass(asset.changePercent24Hr)">
+          {{formatPercentage(asset.changePercent24Hr)}} (24h)
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-card market-cap-card">
+      <div class="stats-header">Market Cap</div>
+      <div class="stats-main">
+        <div class="market-cap">{{formatMarketCap(asset.marketCapUsd)}}</div>
+        <div class="volume">Volume (24h): {{formatMarketCap(asset.volumeUsd24Hr)}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-header">
+      <h2>Price History (Last 30 Days)</h2>
+    </div>
+    <div class="chart-container">
+      <canvas #priceChart></canvas>
+    </div>
+  </div>
+</div> 

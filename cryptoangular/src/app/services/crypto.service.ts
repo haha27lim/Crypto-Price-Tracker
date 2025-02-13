@@ -45,4 +45,14 @@ export class CryptoService {
       )
     );
   }
+
+  getAssetDetails(id: string): Observable<Crypto> {
+    return this.http.get<any>(`${this.apiUrl}/assets/${id}`)
+      .pipe(map(response => response.data));
+  }
+
+  getAssetHistory(id: string, interval: string = 'd1'): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/assets/${id}/history?interval=${interval}`)
+      .pipe(map(response => response.data));
+  }
 } 
