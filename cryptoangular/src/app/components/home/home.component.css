@@ -55,7 +55,7 @@ h1 {
 
 button {
   background-color: transparent;
-  border: none;
+  border: 1px solid var(--border-color);
   color: #ffffff;
   padding: 8px 16px;
   cursor: pointer;
@@ -119,6 +119,7 @@ button.active {
 .crypto-symbol {
   color: #666;
   font-size: 0.9em;
+  font-weight: 500;
 }
 
 .crypto-name-link {

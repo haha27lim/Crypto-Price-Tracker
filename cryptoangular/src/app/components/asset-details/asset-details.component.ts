@@ -47,7 +47,6 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
   initChart(history: any[]) {
     const ctx = this.priceChart.nativeElement.getContext('2d');
     
-    // Sort history by time
     const sortedHistory = [...history].sort((a, b) => 
       new Date(a.time).getTime() - new Date(b.time).getTime()
     );
@@ -130,7 +129,6 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
   formatPrice(price: string): string {
     const numericPrice = parseFloat(price);
     
-    // For prices less than $1
     if (numericPrice < 1) {
       // Find the first non-zero digit after decimal
       const decimalStr = numericPrice.toString().split('.')[1];

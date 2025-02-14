@@ -3,14 +3,8 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  template: '<router-outlet></router-outlet>',
-  styles: [`
-    :host {
-      display: block;
-      min-height: 100vh;
-      background-color: var(--bg-color);
-    }
-  `],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   standalone: true,
   imports: [RouterModule]
 })
