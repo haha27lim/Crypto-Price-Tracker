@@ -28,7 +28,7 @@ export class HomeComponent implements OnInit {
   loading = true;
   searchQuery = '';
   currentView = 'all';
-  currentTheme = 'dark';
+  currentTheme = 'system';
   showThemeMenu = false;
   showDropdown = false;
   dropdownSuggestions: Crypto[] = [];
