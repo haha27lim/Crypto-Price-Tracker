@@ -144,7 +144,7 @@
 .chart-header h2 {
   margin: 0;
   font-size: 18px;
-  color: #ffffff;
+  color: var(--text-color);
 }
 
 .chart-container {

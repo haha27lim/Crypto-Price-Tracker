@@ -3,7 +3,21 @@
     <div class="header-controls">
         <div class="search-bar">
             <input type="text" placeholder="Search cryptocurrencies..." [(ngModel)]="searchQuery"
-                (keyup.enter)="onSearch()" (input)="onSearch()">
+                (keyup.enter)="onSearch()" (input)="onSearch()" (blur)="onSearchFocusOut()">
+            <div class="search-dropdown" *ngIf="showDropdown">
+                <div class="dropdown-item" 
+                     *ngFor="let crypto of dropdownSuggestions"
+                     (click)="selectCrypto(crypto)">
+                    <img [src]="'https://assets.coincap.io/assets/icons/' + crypto.symbol.toLowerCase() + '@2x.png'" 
+                         [alt]="crypto.name"
+                         (error)="onImageError($event)"
+                         class="dropdown-crypto-icon">
+                    <div class="dropdown-crypto-info">
+                        <span class="crypto-symbol">{{crypto.symbol}}</span>
+                        <span class="crypto-name">{{crypto.name}}</span>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="header-buttons">
             <button class="icon-button refresh-btn" (click)="onRefresh()" title="Refresh">

@@ -30,6 +30,8 @@ export class HomeComponent implements OnInit {
   currentView = 'all';
   currentTheme = 'system';
   showThemeMenu = false;
+  showDropdown = false;
+  dropdownSuggestions: Crypto[] = [];
 
   constructor(
     private http: HttpClient,
@@ -61,13 +63,35 @@ export class HomeComponent implements OnInit {
   }
 
   handleSearch() {
-    if (this.cryptos) {
-      this.filteredCryptos = this.cryptos.filter(crypto => 
-        crypto.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-        crypto.symbol.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
+    if (!this.searchQuery.trim()) {
+      this.showDropdown = false;
+      this.dropdownSuggestions = [];
       this.applyCurrentView();
+      return;
     }
+
+    const query = this.searchQuery.toLowerCase();
+    this.dropdownSuggestions = this.cryptos
+      .filter(crypto => 
+        crypto.name.toLowerCase().includes(query) || 
+        crypto.symbol.toLowerCase().includes(query)
+      )
+      .slice(0, 5); // Limit to top 5 suggestions
+
+    this.showDropdown = this.dropdownSuggestions.length > 0;
+  }
+
+  selectCrypto(crypto: Crypto) {
+    this.searchQuery = crypto.name;
+    this.showDropdown = false;
+    this.filteredCryptos = [crypto];
+  }
+
+  onSearchFocusOut() {
+    // Small delay to allow click events on dropdown to fire
+    setTimeout(() => {
+      this.showDropdown = false;
+    }, 200);
   }
 
   switchView(view: string) {
