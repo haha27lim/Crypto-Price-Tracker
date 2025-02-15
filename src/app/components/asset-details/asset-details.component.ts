@@ -32,7 +32,6 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    // Get the saved theme from localStorage
     this.currentTheme = localStorage.getItem('theme') || 'system';
   }
 
@@ -46,8 +45,12 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
 
   initChart(history: any[]) {
     const ctx = this.priceChart.nativeElement.getContext('2d');
-    
-    const sortedHistory = [...history].sort((a, b) => 
+
+    const gridColor = this.currentTheme === 'dark'
+      ? 'rgba(255, 255, 255, 0.1)'
+      : 'rgba(0, 0, 0, 0.1)';
+
+    const sortedHistory = [...history].sort((a, b) =>
       new Date(a.time).getTime() - new Date(b.time).getTime()
     );
 
@@ -112,7 +115,7 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
           },
           y: {
             grid: {
-              color: 'rgba(255, 255, 255, 0.1)'
+              color: gridColor
             },
             ticks: {
               color: '#666',
@@ -128,7 +131,7 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
 
   formatPrice(price: string): string {
     const numericPrice = parseFloat(price);
-    
+
     if (numericPrice < 1) {
       // Find the first non-zero digit after decimal
       const decimalStr = numericPrice.toString().split('.')[1];
@@ -139,10 +142,10 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
           break;
         }
       }
-      
+
       // Show 4 digits after the first significant digit
       const decimals = Math.max(significantIndex + 4, 2);
-      
+
       return new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
@@ -150,7 +153,7 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
         maximumFractionDigits: decimals
       }).format(numericPrice);
     }
-    
+
     // For prices $1 and above
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -174,7 +177,7 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
       notation: 'standard'
     }).format(numericValue);
   }
-  
+
   formatVolume(volume: string): string {
     const numericVolume = parseFloat(volume);
     return new Intl.NumberFormat('en-US', {
@@ -198,5 +201,10 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
 
   onThemeChange(theme: string) {
     this.currentTheme = theme;
+    this.priceHistory$.subscribe(history => {
+      if (history && history.length > 0) {
+        this.initChart(history);
+      }
+    });
   }
 } 
