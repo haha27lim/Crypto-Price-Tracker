@@ -28,7 +28,7 @@ export class HomeComponent implements OnInit {
   loading = true;
   searchQuery = '';
   currentView = 'all';
-  currentTheme = 'system';
+  currentTheme = 'dark';
   showThemeMenu = false;
   showDropdown = false;
   dropdownSuggestions: Crypto[] = [];
@@ -88,7 +88,6 @@ export class HomeComponent implements OnInit {
   }
 
   onSearchFocusOut() {
-    // Small delay to allow click events on dropdown to fire
     setTimeout(() => {
       this.showDropdown = false;
     }, 200);
