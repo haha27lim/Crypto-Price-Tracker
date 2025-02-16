@@ -46,9 +46,14 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
   initChart(history: any[]) {
     const ctx = this.priceChart.nativeElement.getContext('2d');
 
-    const gridColor = this.currentTheme === 'dark'
-      ? 'rgba(255, 255, 255, 0.1)'
-      : 'rgba(0, 0, 0, 0.1)';
+    let gridColor;
+    if (this.currentTheme === 'dark') {
+      gridColor = 'rgba(255, 255, 255, 0.2';
+    } else if (this.currentTheme === 'light') {
+      gridColor = 'rgba(0, 0, 0, 0.1)';
+    } else if (this.currentTheme === 'system') {
+      gridColor = 'rgba(255, 255, 255, 0.2';
+    }
 
     const sortedHistory = [...history].sort((a, b) =>
       new Date(a.time).getTime() - new Date(b.time).getTime()
@@ -92,7 +97,7 @@ export class AssetDetailsComponent implements OnInit, AfterViewInit {
             enabled: true,
             callbacks: {
               label: (context) => {
-                return `$${context.parsed.y.toFixed(2)}`;
+                return `$${context.parsed.y.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
               }
             }
           }

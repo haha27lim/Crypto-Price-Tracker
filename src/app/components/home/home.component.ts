@@ -204,6 +204,7 @@ export class HomeComponent implements OnInit {
     this.currentTheme = theme;
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('theme', theme);
+      document.documentElement.setAttribute('data-theme', theme);
     }
     this.showThemeMenu = false;
   }

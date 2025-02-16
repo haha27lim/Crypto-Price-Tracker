@@ -25,19 +25,19 @@
             </button>
             <div class="theme-dropdown">
                 <button class="icon-button theme-btn" (click)="toggleThemeMenu()" title="Change theme">
+                    <i class="fas fa-desktop" *ngIf="currentTheme === 'system'"></i>
                     <i class="fas fa-moon" *ngIf="currentTheme === 'dark'"></i>
                     <i class="fas fa-sun" *ngIf="currentTheme === 'light'"></i>
-                    <i class="fas fa-desktop" *ngIf="currentTheme === 'system'"></i>
                 </button>
                 <div class="theme-menu" *ngIf="showThemeMenu">
+                    <button (click)="setTheme('system')" [class.active]="currentTheme === 'system'">
+                        <i class="fas fa-desktop"></i> System
+                    </button>
                     <button (click)="setTheme('light')" [class.active]="currentTheme === 'light'">
                         <i class="fas fa-sun"></i> Light
                     </button>
                     <button (click)="setTheme('dark')" [class.active]="currentTheme === 'dark'">
                         <i class="fas fa-moon"></i> Dark
-                    </button>
-                    <button (click)="setTheme('system')" [class.active]="currentTheme === 'system'">
-                        <i class="fas fa-desktop"></i> System
                     </button>
                 </div>
             </div>
