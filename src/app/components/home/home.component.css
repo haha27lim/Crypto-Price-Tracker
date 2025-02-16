@@ -145,6 +145,7 @@ button.active {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-bottom: -0.5px;
 }
 
 .name-cell img {
