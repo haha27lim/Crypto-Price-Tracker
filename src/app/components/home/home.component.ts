@@ -110,11 +110,13 @@ export class HomeComponent implements OnInit {
     switch (this.currentView) {
       case 'gainers':
         filtered.sort((a, b) => parseFloat(b.changePercent24Hr) - parseFloat(a.changePercent24Hr));
-        filtered = filtered.slice(0, 20);
+        filtered = filtered.slice(0, 100);
+        filtered = filtered.filter(crypto => parseFloat(crypto.changePercent24Hr) > 0);
         break;
       case 'losers':
         filtered.sort((a, b) => parseFloat(a.changePercent24Hr) - parseFloat(b.changePercent24Hr));
-        filtered = filtered.slice(0, 20);
+        filtered = filtered.slice(0, 100);
+        filtered = filtered.filter(crypto => parseFloat(crypto.changePercent24Hr) < 0);
         break;
     }
 
@@ -215,6 +217,5 @@ export class HomeComponent implements OnInit {
 
   onThemeChange(theme: string) {
     this.currentTheme = theme;
-    // Apply theme-specific styles or trigger other theme-related logic
   }
 } 
