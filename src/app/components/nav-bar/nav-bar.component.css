@@ -156,3 +156,68 @@ h1 {
   background-color: var(--border-color);
 }
 
+@media (max-width: 768px) {
+  .header-top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .header-controls {
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+  }
+
+  .search-bar {
+    width: 100%;
+    min-width: unset;
+    max-width: none;
+  }
+
+  .search-bar input {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .header-buttons {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .search-dropdown {
+    max-height: 250px;
+  }
+
+  .dropdown-item {
+    padding: 10px;
+  }
+
+  .dropdown-crypto-info {
+    font-size: 14px;
+  }
+
+  .theme-menu {
+    right: 50%;
+    transform: translateX(50%);
+    width: 200px;
+    max-width: 90vw;
+  }
+
+  .icon-button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .theme-menu button {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+

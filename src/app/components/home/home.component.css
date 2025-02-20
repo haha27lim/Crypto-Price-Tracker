@@ -102,14 +102,30 @@ h1 {
 }
 
 .view-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 5px;
   margin-bottom: 20px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.view-controls::-webkit-scrollbar {
+  display: none;
+}
+
+.view-controls button {
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 button {
   background-color: transparent;
   border: 1px solid var(--border-color);
   color:  var(--text-color);
-  padding: 8px 16px;
+  padding: 6px 14px;
   cursor: pointer;
   margin-right: 10px;
   border-radius: 4px;
@@ -303,6 +319,7 @@ button.active {
   .header-top {
     flex-direction: column;
     gap: 15px;
+    padding: 10px;
   }
   
   .header-controls {
@@ -311,17 +328,51 @@ button.active {
     gap: 15px;
   }
   
+  .search-bar {
+    width: 100%;
+  }
+  
   .search-bar input {
     min-width: unset;
     width: 100%;
   }
   
-  .header-buttons {
-    justify-content: center;
+  .view-controls {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 5px;
+    margin: 10px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .view-controls button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    margin-right: 0;
   }
   
   .crypto-table {
     display: block;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -10px;
+    padding: 0 10px;
   }
+  
+  .crypto-table th,
+  .crypto-table td {
+    padding: 10px;
+  }
+  
+  .name-cell {
+    max-width: 200px;
+  }
+  
+  .header-buttons {
+    justify-content: center;
+    width: 100%;
+  }
+
 } 
