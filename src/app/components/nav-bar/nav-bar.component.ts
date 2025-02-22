@@ -95,7 +95,7 @@ export class NavBarComponent {
   }
 
   onSearchFocusOut() {
-    // Small delay to allow click events on dropdown to fire
+
     setTimeout(() => {
       this.showDropdown = false;
     }, 200);
@@ -103,7 +103,7 @@ export class NavBarComponent {
 
   onImageError(event: Event) {
     const img = event.target as HTMLImageElement;
-    img.src = 'assets/placeholder-crypto.png';
+    img.src = '/assets/placeholder-crypto.png';
   }
 
   onRefresh() {

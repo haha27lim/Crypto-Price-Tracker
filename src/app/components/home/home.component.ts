@@ -192,7 +192,7 @@ export class HomeComponent implements OnInit {
 
   onImageError(event: Event) {
     const img = event.target as HTMLImageElement;
-    img.src = 'assets/placeholder-crypto.png';
+    img.src = '/assets/placeholder-crypto.png';
   }
 
   initializeTheme() {
