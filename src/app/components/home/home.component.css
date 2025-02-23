@@ -375,4 +375,12 @@ button.active {
     width: 100%;
   }
 
+  button {
+    padding: 6px 10px;
+  }
+
+  .view-controls {
+    justify-content: center;
+  }
+  
 } 
