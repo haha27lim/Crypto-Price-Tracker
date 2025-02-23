@@ -7,12 +7,10 @@ import { provideServiceWorker } from '@angular/service-worker';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withHashLocation()),
-    provideHttpClient(withFetch()), provideServiceWorker('ngsw-worker.js', {
-            enabled: !isDevMode(),
-            registrationStrategy: 'registerWhenStable:30000'
-          }), provideServiceWorker('ngsw-worker.js', {
-            enabled: !isDevMode(),
-            registrationStrategy: 'registerWhenStable:30000'
-          })
+    provideHttpClient(withFetch()),
+    provideServiceWorker('/ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ]
 };

@@ -12,7 +12,8 @@
           "/index.html",
           "/manifest.webmanifest",
           "/*.css",
-          "/*.js"
+          "/*.js",
+          "/assets/icons/*"
         ]
       }
     },
@@ -22,6 +23,7 @@
       "updateMode": "prefetch",
       "resources": {
         "files": [
+          "/assets/**",
           "/**/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
         ]
       }
@@ -29,9 +31,9 @@
   ],
   "dataGroups": [
     {
-      "name": "api-perform",
+      "name": "crypto-api",
       "urls": [
-        "/api/**"
+        "https://api.coincap.io/v2/**"
       ],
       "cacheConfig": {
         "maxSize": 5,
