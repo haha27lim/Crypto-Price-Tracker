@@ -33,7 +33,7 @@
     {
       "name": "crypto-api",
       "urls": [
-        "https://api.coincap.io/v2/**"
+        "https://rest.coincap.io/v3/**"
       ],
       "cacheConfig": {
         "maxSize": 5,

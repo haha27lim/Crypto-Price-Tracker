@@ -3,6 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 interface Crypto {
   id: string;
@@ -46,7 +47,7 @@ export class NavBarComponent {
   }
 
   fetchCryptos() {
-    this.http.get<{data: Crypto[]}>('https://api.coincap.io/v2/assets')
+    this.http.get<{data: Crypto[]}>(`https://rest.coincap.io/v3/assets?apiKey=${environment.COINCAP_API_KEY}`)
       .subscribe({
         next: (response) => {
           this.cryptos = response.data;

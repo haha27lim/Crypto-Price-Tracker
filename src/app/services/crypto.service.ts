@@ -23,7 +23,7 @@ export interface HistoryPoint {
   providedIn: 'root'
 })
 export class CryptoService {
-  private apiUrl = 'https://api.coincap.io/v2';
+  private apiUrl = 'https://rest.coincap.io/v3/';
 
   constructor(private http: HttpClient) { }
 

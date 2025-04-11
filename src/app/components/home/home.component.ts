@@ -3,6 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
 interface Crypto {
   id: string;
@@ -47,7 +48,7 @@ export class HomeComponent implements OnInit {
 
   fetchCryptos() {
     this.loading = true;
-    this.http.get<{data: Crypto[]}>('https://api.coincap.io/v2/assets')
+    this.http.get<{data: Crypto[]}>(`https://rest.coincap.io/v3/assets?apiKey=${environment.COINCAP_API_KEY}`)
       .subscribe({
         next: (response) => {
           this.cryptos = response.data;
