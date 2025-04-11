@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 export interface Crypto {
   id: string;
@@ -23,9 +24,14 @@ export interface HistoryPoint {
   providedIn: 'root'
 })
 export class CryptoService {
-  private apiUrl = 'https://rest.coincap.io/v3/';
+  private apiUrl = 'https://rest.coincap.io/v3';
+  private headers: HttpHeaders;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.headers = new HttpHeaders({
+      'Authorization': `Bearer ${environment.COINCAP_API_KEY}`
+    });
+  }
 
   getAllCryptos(): Observable<Crypto[]> {
     return this.http.get<any>(`${this.apiUrl}/assets?limit=100`)
@@ -53,12 +59,12 @@ export class CryptoService {
   }
 
   getAssetDetails(id: string): Observable<Crypto> {
-    return this.http.get<any>(`${this.apiUrl}/assets/${id}`)
+    return this.http.get<any>(`${this.apiUrl}/assets/${id}`, { headers: this.headers })
       .pipe(map(response => response.data));
   }
 
   getAssetHistory(id: string, interval: string = 'd1'): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/assets/${id}/history?interval=${interval}`)
+    return this.http.get<any>(`${this.apiUrl}/assets/${id}/history?interval=${interval}`, { headers: this.headers })
       .pipe(map(response => response.data));
   }
 } 
