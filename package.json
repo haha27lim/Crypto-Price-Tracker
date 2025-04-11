@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "node -r dotenv/config mynode.js && ng serve",
-    "build": "node -r dotenv/config mynode.js && ng build",
-    "watch": "ng build --watch --configuration development",
+    "build": "node mynode.js && ng build",
+    "watch": "node mynode.js && ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:cryptoangular": "node dist/cryptoangular/server/server.mjs"
   },
