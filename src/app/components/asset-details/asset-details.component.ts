@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CryptoService, Crypto } from '../../services/crypto.service';
 import { Observable } from 'rxjs';
-import { Chart, TimeScale } from 'chart.js/auto';
+import { Chart } from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 import { NavBarComponent } from '../nav-bar/nav-bar.component';
 
